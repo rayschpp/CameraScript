@@ -4,9 +4,15 @@ using UnityEngine;
 
 public class CameraController : MonoBehaviour
 {
-
+    
+    // List of cameras to cycle through.
     private Camera[] listOfCameras;
+    
+    // Index to for the current camera.
     private int currentCameraIndex;
+
+    // Text on the ui to indicate current camera.
+    private UnityEngine.UI.Text cameraIndicator;
 
     // Start is called before the first frame update
     async void Start()
@@ -21,6 +27,10 @@ public class CameraController : MonoBehaviour
         {
             listOfCameras[i].gameObject.SetActive(false);
         }
+
+        // Get the text ui object
+        this.cameraIndicator = GameObject.Find("CameraIndicator").GetComponent<UnityEngine.UI.Text>();
+        this.cameraIndicator.text = listOfCameras[currentCameraIndex].gameObject.name;
     }
 
     // Update is called once per frame
@@ -28,14 +38,18 @@ public class CameraController : MonoBehaviour
     {
         if (Input.GetKeyUp(KeyCode.C))
         {
+            // Disable current camera
             this.listOfCameras[this.currentCameraIndex].gameObject.SetActive(false);
             this.currentCameraIndex++;
+            // Check if index is greater than length of camera list to prevent overflow
             if (!(this.currentCameraIndex < this.listOfCameras.Length))
             {
                 this.currentCameraIndex = 0;
             }
+            // Set next camera active
             this.listOfCameras[this.currentCameraIndex].gameObject.SetActive(true);
-            Debug.Log ("Camera with name: " + this.listOfCameras[this.currentCameraIndex].gameObject.name + ", is now enabled");
+            // Update camera indicator
+            this.cameraIndicator.text = listOfCameras[currentCameraIndex].gameObject.name;
         }
     }
 }
